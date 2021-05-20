@@ -7,6 +7,10 @@ services:
       NEO4J_dbms_security_procedures_unrestricted: "apoc.*,horus.*"
       NEO4J_dbms_memory_heap_maxsize: "8G"
       NEO4J_dbms_jvm_additional: "-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.port=3637 -Dcom.sun.management.jmxremote.rmi.port=3637 -Djava.rmi.server.hostname=<EXTERNAL_IP_ADDRESS>"
+      NEO4J_apoc_export_file_enabled: "true"
+      NEO4J_apoc_import_file_enabled: "true"
+      NEO4J_apoc_import_file_use__neo4j__config: "true"
+      NEO4JLABS_PLUGINS: "[\"apoc\"]"
     volumes:
     - ./neo4j/logs:/logs
     - ./neo4j/data:/data
@@ -55,7 +59,7 @@ services:
     - kafka
     ports:
     - "9010:9010"
-    command: ["wait-for-it", "neo4j:7687", "--", "java", "-Dcom.sun.management.jmxremote", "-Dcom.sun.management.jmxremote.port=9010", "-Dcom.sun.management.jmxremote.local.only=false",  "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", "-Djava.rmi.server.hostname=<EXTERNAL_IP_ADDRESS>", "-Dcom.sun.management.jmxremote.rmi.port=9010",  "-jar", "horus-consumer-1.0-SNAPSHOT.jar"]
+    command: ["wait-for-it", "-t", "0", "neo4j:7687", "--", "java", "-Dcom.sun.management.jmxremote", "-Dcom.sun.management.jmxremote.port=9010", "-Dcom.sun.management.jmxremote.local.only=false",  "-Dcom.sun.management.jmxremote.authenticate=false", "-Dcom.sun.management.jmxremote.ssl=false", "-Dcom.sun.management.jmxremote.rmi.port=9010",  "-jar", "horus-consumer-1.0-SNAPSHOT.jar"]
 networks:
   default:
     external:
